@@ -8,11 +8,19 @@ class AggregateUserDataUseCase(
 ) : Closeable {
 
     suspend fun aggregateDataForCurrentUser(): AggregatedData {
-        TODO("implement task")
+  // scope is used to represent the prefrefered scope on which this runs on
+    scope.launch {
+    
+        val userEntity =  resolveCurrentUser.invoke()
+        val comments =  fetchUserComments.invoke()
+        val friends =  fetchSuggestedFriends.invoke()
+    
+        return AggregatedData(userEntity,comments,friends)
+     }
     }
 
     override fun close() {
-        TODO("implement task")
+        scope.close()
     }
 }
 
